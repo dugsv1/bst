@@ -132,6 +132,24 @@ class Tree{
         }
        return 1 + this.depth(node.parent)
     }
+    isBalanced(node = this.root){
+        if (node == null){
+            return true
+        }
+        let leftHeight = this.height(node.left)
+        let rightHeight = this.height(node.right)
+
+        if (Math.abs(leftHeight - rightHeight) > 1){
+            return false
+        }
+
+        return this.isBalanced(node.left) && this.isBalanced(node.right)
+    }
+    rebalance(){
+        let values = []
+        this.inOrder(node => values.push(node.data), this.root)
+        this.root = this.buildTree(values, 0, values.length-1)
+    }
 }
 const prettyPrint = (node, prefix = "", isLeft = true) => {
     if (node === null) {
@@ -150,5 +168,5 @@ const prettyPrint = (node, prefix = "", isLeft = true) => {
 const testArray = [1, 7, 4, 23, 8, 9, 4, 3, 5, 7, 9, 67, 6345, 324]
 
 const testTree = new Tree(testArray)
+testTree.rebalance()
 prettyPrint(testTree.root)
-console.log(testTree.depth(testTree.find(7)))
